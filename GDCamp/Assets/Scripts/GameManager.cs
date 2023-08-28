@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-public Takım currentTurn;
+public Takim currentTurn;
 public int roundcount = 1;
     public static GameManager instance;
     private void Awake()

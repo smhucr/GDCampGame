@@ -4,25 +4,25 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
-public enum Takım
+public enum Takim
 {
     Mavi,
-    Kırmızı,
+    Kirmizi,
     Neutral
 }
 public class Hex : MonoBehaviour
 {
     public Vector2Int id;
     public int askersayisi;
-    public bool tıklanabilirlik = false;
-    public List<Hex> komşular = new List<Hex>();
-    public Takım takım = Takım.Neutral; // Başlangıçta tüm hex'ler nötr
-    public bool isBase = false; // Bir hex'in base olup olmadığını kontrol etmek için
-    public int baseCan = 100;  // Eğer bir hex base ise bu değeri kullanabiliriz
+    public bool tiklanabilirlik = false;
+    public List<Hex> komsular = new List<Hex>();
+    public Takim takim = Takim.Neutral; // Baslangicta tum hex'ler notr
+    public bool isBase = false; // Bir hex'in base olup olmadigini kontrol etmek icin
+    public int baseCan = 100;  // Eger bir hex base ise bu degeri kullanabiliriz
     //textmeshpro soldiertext;
     public TextMeshPro askerSayisiText;
     public Material maviMaterial;
-    public Material kırmızıMaterial;
+    public Material kirmiziMaterial;
     public Material neutralMaterial;
 
     public void UpdateAskerSayisiText()
@@ -30,26 +30,26 @@ public class Hex : MonoBehaviour
         if (askerSayisiText != null)
             askerSayisiText.text = askersayisi.ToString();
     }
-    public void SetAsBase(Takım takim)
+    public void SetAsBase(Takim takim)
     {
-        this.takım = takim;
+        this.takim = takim;
         this.isBase = true;
     }
 
-    public void AssignToTeam(Takım takim)
+    public void AssignToTeam(Takim takim)
     {
-        this.takım = takim;
+        this.takim = takim;
         UpdateHexColor();
     }
 
-    public void AddSoldier(Takım playerTeam)
+    public void AddSoldier(Takim playerTeam)
     {
         print(playerTeam);
-        if (takım == playerTeam || takım == Takım.Neutral)
+        if (takim == playerTeam || takim == Takim.Neutral)
         {
             askersayisi++;
             AssignToTeam(playerTeam);
-            print(takım);
+            print(takim);
         }
 
         UpdateAskerSayisiText();
@@ -60,13 +60,13 @@ public class Hex : MonoBehaviour
     {
         MeshRenderer renderer = GetComponent<MeshRenderer>();
 
-        switch (takım)
+        switch (takim)
         {
-            case Takım.Mavi:
+            case Takim.Mavi:
                 renderer.sharedMaterial = maviMaterial;
                 break;
-            case Takım.Kırmızı:
-                renderer.sharedMaterial = kırmızıMaterial;
+            case Takim.Kirmizi:
+                renderer.sharedMaterial = kirmiziMaterial;
                 break;
             default:
                 renderer.sharedMaterial = neutralMaterial;

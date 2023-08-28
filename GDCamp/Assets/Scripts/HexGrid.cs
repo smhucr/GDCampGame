@@ -16,8 +16,8 @@ public class HexGrid : MonoBehaviour
 
     private float hexOffsetX = 2.0f;
     private float hexOffsetZ = 1.73f;
-    private Takım currentTurn = Takım.Mavi; // Başlangıçta mavi takımın turunu başlatıyoruz.
-    public int totalMovesPerTurn = 3; // Örnek olarak her tur için 3 hamle izni verdik.
+    private Takim currentTurn = Takim.Mavi; // Baslangicta mavi takimin turunu baslatiyoruz.
+    public int totalMovesPerTurn = 3; // ornek olarak her tur icin 3 hamle izni verdik.
     public GameObject textMeshProPrefab;
 
 
@@ -30,13 +30,13 @@ public class HexGrid : MonoBehaviour
     {
         for (int j = 0; j < height; j++)
         {
-            int currentWidth = width; // default değer
+            int currentWidth = width; // default deger
             if (j % 2 == 1)
             {
-                currentWidth--; // Tek sayılı j değerleri için width 1 azaltılıyor.
+                currentWidth--; // Tek sayili j degerleri icin width 1 azaltiliyor.
             }
 
-            for (int i = 0; i < currentWidth; i++) // Tek sayılı sıralarda width - 1 kadar dönüyor
+            for (int i = 0; i < currentWidth; i++) // Tek sayili siralarda width - 1 kadar donuyor
             {
                 GameObject hexObject = Instantiate(hexPrefab, PositionForIJ(i, j), Quaternion.identity);
                 hexObject.transform.parent = this.transform;
@@ -68,20 +68,20 @@ public class HexGrid : MonoBehaviour
         Hex maviBaseHex = hexes.FirstOrDefault(h => h.id.x == 0 && h.id.y == middleRow);
         if (maviBaseHex != null)
         {
-            maviBaseHex.SetAsBase(Takım.Mavi);
+            maviBaseHex.SetAsBase(Takim.Mavi);
             Instantiate(basePrefab, maviBaseHex.transform.position, Quaternion.identity);
         }
 
-        Hex kırmızıBaseHex = hexes.FirstOrDefault(h => h.id.x == width - 1 && h.id.y == middleRow);
-        if (kırmızıBaseHex != null)
+        Hex kirmiziBaseHex = hexes.FirstOrDefault(h => h.id.x == width - 1 && h.id.y == middleRow);
+        if (kirmiziBaseHex != null)
         {
-            kırmızıBaseHex.SetAsBase(Takım.Kırmızı);
-            Instantiate(basePrefab, kırmızıBaseHex.transform.position, Quaternion.identity);
+            kirmiziBaseHex.SetAsBase(Takim.Kirmizi);
+            Instantiate(basePrefab, kirmiziBaseHex.transform.position, Quaternion.identity);
         }
 
         foreach (var hex in hexes)
         {
-            hex.komşular = komşubul(hex);
+            hex.komsular = komsubul(hex);
         }
     }
 
@@ -99,9 +99,9 @@ public class HexGrid : MonoBehaviour
         switch (GameManager.instance.roundcount)
         {
             case 1:
-            tıklanabilirlikleriSıfırla();
-            currentTurnBaseHexKomşuları();
-                if (Input.GetMouseButtonDown(0) && getselectedhex().tıklanabilirlik)
+            tiklanabilirlikleriSifirla();
+            currentTurnBaseHexKomsulari();
+                if (Input.GetMouseButtonDown(0) && getselectedhex().tiklanabilirlik)
                 {
                     Hex hex = getselectedhex();
                     hex.askersayisi += 5;
@@ -115,8 +115,8 @@ public class HexGrid : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     Hex hex = getselectedhex();
-                    tıklanabilirlikleriGüncelle();
-                    tıklananHexKomşuları(hex);
+                    tiklanabilirlikleriGuncelle();
+                    tiklananHexKomsulari(hex);
                 }
                 break; // This break is required to exit the case.
         }
@@ -139,16 +139,16 @@ public class HexGrid : MonoBehaviour
 
     void EndTurn()
     {
-        if (currentTurn == Takım.Mavi)
+        if (currentTurn == Takim.Mavi)
         {
-            currentTurn = Takım.Kırmızı;
-            GameManager.instance.currentTurn = Takım.Kırmızı;
+            currentTurn = Takim.Kirmizi;
+            GameManager.instance.currentTurn = Takim.Kirmizi;
         }
 
-        else if (currentTurn == Takım.Kırmızı)
+        else if (currentTurn == Takim.Kirmizi)
         {
-            currentTurn = Takım.Mavi;
-            GameManager.instance.currentTurn = Takım.Mavi;
+            currentTurn = Takim.Mavi;
+            GameManager.instance.currentTurn = Takim.Mavi;
             GameManager.instance.roundcount++;
             if (GameManager.instance.roundcount >= 5)
             {
@@ -157,16 +157,16 @@ public class HexGrid : MonoBehaviour
         }
 
         // Tur sonu bilgilendirmesi
-        Debug.Log($"{currentTurn} Takımının Turu Başlıyor!");
+        Debug.Log($"{currentTurn} Takiminin Turu Basliyor!");
     }
-    List<Hex> komşubul(Hex centerHex)
+    List<Hex> komsubul(Hex centerHex)
     {
         Vector2Int centerID = centerHex.id;
         List<Vector2Int> neighborOffsets;
 
         if (centerID.y % 2 == 0)
         {
-            // Çift satırlar için komşu ofsetleri
+            // cift satirlar icin komsu ofsetleri
             neighborOffsets = new List<Vector2Int>
             {
                 new Vector2Int(-1, 0),
@@ -179,7 +179,7 @@ public class HexGrid : MonoBehaviour
         }
         else
         {
-            // Tek satırlar için komşu ofsetleri
+            // Tek satirlar icin komsu ofsetleri
             neighborOffsets = new List<Vector2Int>
             {
                 new Vector2Int(-1, 0),
@@ -203,90 +203,90 @@ public class HexGrid : MonoBehaviour
         return neighbors;
     }
 
-    //tur hangi oyuncudaysa onun takımına ait hexleri tıklanabilir yap (base hariç), sağ tık ile tıklanabilirlikleri sıfırla
-    public void tıklanabilirlikleriGüncelle()
+    //tur hangi oyuncudaysa onun takimina ait hexleri tiklanabilir yap (base haric), sag tik ile tiklanabilirlikleri sifirla
+    public void tiklanabilirlikleriGuncelle()
     {
         foreach (var item in hexes)
         {
-            if (item.takım == GameManager.instance.currentTurn && !item.isBase)
+            if (item.takim == GameManager.instance.currentTurn && !item.isBase)
             {
-                item.tıklanabilirlik = true;
+                item.tiklanabilirlik = true;
             }
             else
             {
-                item.tıklanabilirlik = false;
+                item.tiklanabilirlik = false;
             }
         }
     }
 
-    //tıklanan hex'in komşularını tıklanabilir yap kendisi ve komşuları dışındakileri tıklanabilirliklerini false yap
-    public void tıklananHexKomşuları(Hex tıklananHex)
+    //tiklanan hex'in komsularini tiklanabilir yap kendisi ve komsulari disindakileri tiklanabilirliklerini false yap
+    public void tiklananHexKomsulari(Hex tiklananHex)
     {
         foreach (var item in hexes)
         {
-            if (item == tıklananHex)
+            if (item == tiklananHex)
             {
-                item.tıklanabilirlik = true;
+                item.tiklanabilirlik = true;
             }
             else
             {
-                item.tıklanabilirlik = false;
+                item.tiklanabilirlik = false;
             }
         }
-        foreach (var item in tıklananHex.komşular)
+        foreach (var item in tiklananHex.komsular)
         {
-            item.tıklanabilirlik = true;
+            item.tiklanabilirlik = true;
         }
     }
 
 
-    //mavi base hexin komşularını bulup tıklanabilirliklerini true yapar
-    public void maviBaseHexKomşuları()
+    //mavi base hexin komsularini bulup tiklanabilirliklerini true yapar
+    public void maviBaseHexKomsulari()
     {
         Hex maviBaseHex = hexes.FirstOrDefault(h => h.id.x == 0 && h.id.y == height / 2);
         if (maviBaseHex != null)
         {
-            maviBaseHex.tıklanabilirlik = false;
-            foreach (var item in maviBaseHex.komşular)
+            maviBaseHex.tiklanabilirlik = false;
+            foreach (var item in maviBaseHex.komsular)
             {
-                item.tıklanabilirlik = true;
+                item.tiklanabilirlik = true;
             }
         }
     }
 
-    //kırmızı base hexin komşularını bulup tıklanabilirliklerini true yapar
-    public void kırmızıBaseHexKomşuları()
+    //kirmizi base hexin komsularini bulup tiklanabilirliklerini true yapar
+    public void kirmiziBaseHexKomsulari()
     {
-        Hex kırmızıBaseHex = hexes.FirstOrDefault(h => h.id.x == width - 1 && h.id.y == height / 2);
-        if (kırmızıBaseHex != null)
+        Hex kirmiziBaseHex = hexes.FirstOrDefault(h => h.id.x == width - 1 && h.id.y == height / 2);
+        if (kirmiziBaseHex != null)
         {
-            kırmızıBaseHex.tıklanabilirlik = false;
-            foreach (var item in kırmızıBaseHex.komşular)
+            kirmiziBaseHex.tiklanabilirlik = false;
+            foreach (var item in kirmiziBaseHex.komsular)
             {
-                item.tıklanabilirlik = true;
+                item.tiklanabilirlik = true;
             }
         }
     }
 
-    //currentturn takımının base hexinin komşularını bulup tıklanabilirliklerini true yapar
-    public void currentTurnBaseHexKomşuları()
+    //currentturn takiminin base hexinin komsularini bulup tiklanabilirliklerini true yapar
+    public void currentTurnBaseHexKomsulari()
     {
-        if (GameManager.instance.currentTurn == Takım.Mavi)
+        if (GameManager.instance.currentTurn == Takim.Mavi)
         {
-            maviBaseHexKomşuları();
+            maviBaseHexKomsulari();
         }
-        else if (GameManager.instance.currentTurn == Takım.Kırmızı)
+        else if (GameManager.instance.currentTurn == Takim.Kirmizi)
         {
-            kırmızıBaseHexKomşuları();
+            kirmiziBaseHexKomsulari();
         }
     }
 
-    //tüm hexlerin tıklanabilirliklerini false yapar
-    public void tıklanabilirlikleriSıfırla()
+    //tum hexlerin tiklanabilirliklerini false yapar
+    public void tiklanabilirlikleriSifirla()
     {
         foreach (var item in hexes)
         {
-            item.tıklanabilirlik = false;
+            item.tiklanabilirlik = false;
         }
     }
 
